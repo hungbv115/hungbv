@@ -1,0 +1,16 @@
+<!-- common-steps.xml -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:batch="http://www.springframework.org/schema/batch"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/batch
+                           http://www.springframework.org/schema/batch/spring-batch.xsd">
+
+    <bean id="commonTasklet" class="com.batch.processing.hungbv.config.CommonTasklet" />
+
+    <batch:step id="commonStep">
+        <batch:tasklet ref="commonTasklet" />
+    </batch:step>
+
+</beans>

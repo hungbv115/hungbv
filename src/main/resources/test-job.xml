@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:batch="http://www.springframework.org/schema/batch"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/batch
+                           http://www.springframework.org/schema/batch/spring-batch.xsd">
+    <import resource="classpath:common-steps.xml" />
+
+    <batch:flow id="flowB">
+        <batch:step id="step2" parent="commonStep">
+            <batch:tasklet>
+                <bean class="com.batch.processing.hungbv.config.FirstTasklet">
+                    <property name="myList">
+                        <list>
+                            <value>Hello! BUI VAN HUNG</value>
+                        </list>
+                    </property>
+                </bean>
+            </batch:tasklet>
+        </batch:step>
+    </batch:flow>
+    <!-- Job chính -->
+    <batch:job id="mainJob">
+        <batch:step id="step1">
+            <batch:tasklet>
+                <batch:chunk reader="reader1" writer="itemWriter" commit-interval="10" />
+            </batch:tasklet>
+            <batch:next on="*" to="stepx"/>
+        </batch:step>
+
+        <batch:step id="stepx">
+            <batch:flow parent="flowB"/>
+            <batch:next to="step3" on="*"/>
+        </batch:step>
+
+        <batch:step id="step3">
+            <batch:tasklet>
+                <batch:chunk reader="reader1" writer="itemWriter" commit-interval="10" />
+            </batch:tasklet>
+        </batch:step>
+
+    </batch:job>
+
+    <!-- Step 1 components -->
+    <bean id="reader1" class="com.batch.processing.hungbv.itemReader.FirstItemReader">
+        <property name="myList">
+            <list>
+                <value>Item 1</value>
+                <value>Item 2</value>
+                <value>Item 3</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="itemWriter" class="com.batch.processing.hungbv.itemWriter.FirstItemWriter">
+        <!-- Cấu hình cho writer -->
+    </bean>
+
+</beans>

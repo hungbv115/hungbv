@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:batch="http://www.springframework.org/schema/batch"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/batch
+                           http://www.springframework.org/schema/batch/spring-batch.xsd">
+
+
+    <!-- Job definition that includes both steps -->
+    <batch:job id="myJob">
+        <!-- Define the first step -->
+        <batch:step id="step1">
+            <batch:tasklet>
+                <batch:listeners>
+                    <batch:listener ref="jobExecutionListener"/>
+                </batch:listeners>
+                <batch:chunk reader="reader1" processor="processor1" writer="writer1"
+                             commit-interval="10"/>
+            </batch:tasklet>
+        </batch:step>
+    </batch:job>
+
+    <!-- Step 1 components -->
+    <bean id="reader1" class="com.batch.processing.hungbv.itemReader.FirstItemReader">
+        <property name="myList">
+            <list>
+                <value>Item 1</value>
+                <value>Item 2</value>
+                <value>Item 3</value>
+            </list>
+        </property>
+    </bean>
+    <bean id="processor1" class="com.batch.processing.hungbv.itemProcess.FirstItemProcess"/>
+    <bean id="writer1" class="com.batch.processing.hungbv.itemWriter.FirstItemWriter"/>
+
+    <!-- Define JobExecutionListener -->
+    <bean id="jobExecutionListener" class="com.batch.processing.hungbv.batchprocessing.TimingStepExecutionListener"/>
+
+</beans>
