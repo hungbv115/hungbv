@@ -13,7 +13,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ImportResource;
 
 @SpringBootApplication
-@EnableBatchProcessing
 @ImportResource("classpath:test-job.xml")
 public class BatchApplication implements CommandLineRunner {
 

@@ -20,7 +20,7 @@
 <!--            <batch:next to="step3" on="*"/>-->
 <!--        </batch:flow>-->
         <batch:step id="job1.flow1" >
-            <batch:job ref="job" job-launcher="jobLauncher" job-parameters-extractor=""/>
+            <batch:job ref="job" job-launcher="jobLauncher" job-parameters-extractor="jobParametersExtractor"/>
 
             <batch:next to="step3" on="*"/>
         </batch:step>
