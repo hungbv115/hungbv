@@ -7,10 +7,42 @@
                            http://www.springframework.org/schema/batch
                            http://www.springframework.org/schema/batch/spring-batch.xsd">
 
-    <bean id="commonTasklet" class="com.batch.processing.hungbv.config.CommonTasklet" />
+    <batch:job id="job" restartable="true">
+        <batch:step id="X">
+            <batch:tasklet>
+                <bean class="com.batch.processing.hungbv.config.CommonTasklet" scope="job">
+                    <property name="nameBean">
+                        <bean class="com.batch.processing.hungbv.bean.NameBean">
+                            <property name="name" value="commonStep flowB" />
+                        </bean>
+                    </property>
+                </bean>
+                <batch:listeners merge="true">
+                    <batch:listener ref="promotionListener"/>
+                </batch:listeners>
+            </batch:tasklet>
+            <batch:next on="*" to="Y"/>
+        </batch:step>
 
-    <batch:step id="commonStep">
-        <batch:tasklet ref="commonTasklet" />
-    </batch:step>
+        <batch:step id="Y">
+            <batch:tasklet>
+                <bean class="com.batch.processing.hungbv.config.CommonTasklet" scope="job">
+                    <property name="nameBean">
+                        <bean class="com.batch.processing.hungbv.bean.NameBean">
+                            <property name="name" value="commonStep2 flowB" />
+                        </bean>
+                    </property>
+                </bean>
+            </batch:tasklet>
+        </batch:step>
+    </batch:job>
 
+    <bean id="promotionListener" class="org.springframework.batch.core.listener.ExecutionContextPromotionListener">
+        <property name="keys">
+            <list>
+                <value>someKey</value>
+            </list>
+        </property>
+    </bean>
 </beans>
+
