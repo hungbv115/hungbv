@@ -8,30 +8,20 @@
                            http://www.springframework.org/schema/batch/spring-batch.xsd">
     <import resource="classpath:common-steps.xml" />
 
-    <batch:flow id="flowB">
-        <batch:step id="step2" parent="commonStep">
-            <batch:tasklet>
-                <bean class="com.batch.processing.hungbv.config.FirstTasklet">
-                    <property name="myList">
-                        <list>
-                            <value>Hello! BUI VAN HUNG</value>
-                        </list>
-                    </property>
-                </bean>
-            </batch:tasklet>
-        </batch:step>
-    </batch:flow>
     <!-- Job chính -->
-    <batch:job id="mainJob">
+    <batch:job id="jobA">
         <batch:step id="step1">
             <batch:tasklet>
                 <batch:chunk reader="reader1" writer="itemWriter" commit-interval="10" />
             </batch:tasklet>
-            <batch:next on="*" to="stepx"/>
+            <batch:next on="*" to="job1.flow1"/>
         </batch:step>
+<!--        <batch:flow id="job1.flow1" parent="flowB">-->
+<!--            <batch:next to="step3" on="*"/>-->
+<!--        </batch:flow>-->
+        <batch:step id="job1.flow1" >
+            <batch:job ref="job" job-launcher="jobLauncher" job-parameters-extractor=""/>
 
-        <batch:step id="stepx">
-            <batch:flow parent="flowB"/>
             <batch:next to="step3" on="*"/>
         </batch:step>
 
@@ -56,6 +46,10 @@
 
     <bean id="itemWriter" class="com.batch.processing.hungbv.itemWriter.FirstItemWriter">
         <!-- Cấu hình cho writer -->
+    </bean>
+
+    <bean id="jobParametersExtractor" class="org.springframework.batch.core.step.job.DefaultJobParametersExtractor">
+        <property name="keys" value="input.file"/>
     </bean>
 
 </beans>
