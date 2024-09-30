@@ -20,9 +20,9 @@ public class MainTest {
         tables.add(DataTable.builder().varSeq(5).lengthCol(6).startPosition(14).endPosition(20).build());
         tables.add(DataTable.builder().varSeq(6).lengthCol(6).startPosition(20).endPosition(26).build());
         //a|sdfghj|klbcm6|m|kjfhd|uiekvs -> dfghj|klbcm6|m|k
-        int startPos = 0;
-        int target = 21;
-        int endPos = 21;
+        int startPos = 5;
+        int target = 5;
+        int endPos = 10;
         Optional<DataTable> startPosition = tables.stream().filter(obj -> obj.getStartPosition() <= startPos
                 && obj.getEndPosition() > startPos).findFirst();
 
@@ -55,7 +55,7 @@ public class MainTest {
                 start0 = startPos - dataFind.get(i).getStartPosition();
                 int end1;
                 if(dataFind.size() == 1) {
-                    end1 = dataFind.get(i).getLengthCol() + target;
+                    end1 = endPos - dataFind.get(i).getStartPosition();
                 } else {
                     end1 = dataFind.get(i).getLengthCol();
                 }
@@ -64,7 +64,7 @@ public class MainTest {
                 start = start0 + "," + end1;
             } else {
 
-                end0 = dataFind.get(i).getLengthCol() + target;
+                end0 = endPos - dataFind.get(i).getStartPosition();
                 end0 = Math.max(end0, 0);
             }
 
