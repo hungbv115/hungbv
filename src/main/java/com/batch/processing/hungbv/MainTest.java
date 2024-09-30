@@ -46,7 +46,7 @@ public class MainTest {
                 result.append(dataFind.get(i).getVarSeq()).append(",0,0").append("-");
                 continue;
             }
-            int start0 = 0;
+            int start0;
             int end0 = 0;
             String start = "";
             if(i == 0) {
