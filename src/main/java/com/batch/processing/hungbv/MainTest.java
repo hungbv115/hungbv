@@ -20,9 +20,9 @@ public class MainTest {
         tables.add(DataTable.builder().varSeq(5).lengthCol(6).startPosition(14).endPosition(20).build());
         tables.add(DataTable.builder().varSeq(6).lengthCol(6).startPosition(20).endPosition(26).build());
         //a|sdfghj|klbcm6|m|kjfhd|uiekvs -> dfghj|klbcm6|m|k
-        int startPos = 5;
-        int target = 5;
-        int endPos = 10;
+        int startPos = 1;
+        int target = 6;
+        int endPos = 7;
         Optional<DataTable> startPosition = tables.stream().filter(obj -> obj.getStartPosition() <= startPos
                 && obj.getEndPosition() > startPos).findFirst();
 
@@ -50,8 +50,6 @@ public class MainTest {
             int end0 = 0;
             String start = "";
             if(i == 0) {
-                // index = độ dài chuỗi của cột - 1 (1 chính là phần bù độ dài)
-                // index = độ dài chuỗi của cột - (độ dài chuỗi của cột - vị trí bắt đầu lấy) - phần bù độ dài
                 start0 = startPos - dataFind.get(i).getStartPosition();
                 int end1;
                 if(dataFind.size() == 1) {
