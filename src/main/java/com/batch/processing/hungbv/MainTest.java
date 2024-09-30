@@ -17,12 +17,12 @@ public class MainTest {
         tables.add(DataTable.builder().varSeq(2).lengthCol(6).startPosition(1).endPosition(7).build());
         tables.add(DataTable.builder().varSeq(3).lengthCol(6).startPosition(7).endPosition(13).build());
         tables.add(DataTable.builder().varSeq(4).lengthCol(1).startPosition(13).endPosition(14).build());
-        tables.add(DataTable.builder().varSeq(5).lengthCol(5).startPosition(14).endPosition(20).build());
+        tables.add(DataTable.builder().varSeq(5).lengthCol(6).startPosition(14).endPosition(20).build());
         tables.add(DataTable.builder().varSeq(6).lengthCol(6).startPosition(20).endPosition(26).build());
         //a|sdfghj|klbcm6|m|kjfhd|uiekvs -> dfghj|klbcm6|m|k
         int startPos = 0;
-        int target = 14;
-        int endPos = 14;
+        int target = 21;
+        int endPos = 21;
         Optional<DataTable> startPosition = tables.stream().filter(obj -> obj.getStartPosition() <= startPos
                 && obj.getEndPosition() > startPos).findFirst();
 
@@ -47,18 +47,28 @@ public class MainTest {
                 continue;
             }
             int start0 = 0;
-            int end0;
+            int end0 = 0;
+            String start = "";
             if(i == 0) {
                 // index = độ dài chuỗi của cột - 1 (1 chính là phần bù độ dài)
                 // index = độ dài chuỗi của cột - (độ dài chuỗi của cột - vị trí bắt đầu lấy) - phần bù độ dài
-                start0 = dataFind.get(i).getLengthCol() - (dataFind.get(i).getLengthCol() - startPos) - 1;
+                start0 = startPos - dataFind.get(i).getStartPosition();
+                int end1;
+                if(dataFind.size() == 1) {
+                    end1 = dataFind.get(i).getLengthCol() + target;
+                } else {
+                    end1 = dataFind.get(i).getLengthCol();
+                }
                 start0 = Math.max(start0, 0);
+
+                start = start0 + "," + end1;
+            } else {
+
+                end0 = dataFind.get(i).getLengthCol() + target;
+                end0 = Math.max(end0, 0);
             }
 
-            end0 = dataFind.get(i).getLengthCol() + target;
-            end0 = Math.max(end0, 0);
-
-            String temp = i == 0 ? start0 + "," + (dataFind.get(i).getEndPosition() - 1) + "-": "0," + end0;
+            String temp = i == 0 ? start + "-": "0," + end0;
 
             result.append(dataFind.get(i).getVarSeq()).append(",").append(temp);
 
@@ -67,7 +77,7 @@ public class MainTest {
         System.out.println("index: " + result);
         StringBuilder fi = new StringBuilder();
         for(int i = 0; i < result.toString().split("-").length; i++) {
-            String[] a = "a|sdfghj|klbcm6|m|kjfhd|uiekvs".split("\\|");
+            String[] a = "a|sdfghj|klbcm6|m|kjfphd|uiekvs".split("\\|");
             String[] arrIndex = result.toString().split("-")[i].split(",");
             String temp = a[Integer.parseInt(arrIndex[0])-1].substring(Integer.parseInt(arrIndex[1]), Integer.parseInt(arrIndex[2]));
             if(Integer.parseInt(arrIndex[1]) == 0 && Integer.parseInt(arrIndex[2]) == 0) {
